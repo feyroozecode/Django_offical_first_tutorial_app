@@ -1,36 +1,28 @@
 from django.http import HttpResponse 
-from django.template import loader 
+from django.shortcuts import render
 from .models import Question
 
 """
     Index View:
-    Displays the latest questions on a webpage.
-
+        Displays the latest questions on a webpage.
     Parameters:
-    - request (HttpRequest): The HTTP request object.
-
+        - request (HttpRequest): The HTTP request object.
     Returns:
-    - HttpResponse: The HTTP response containing the rendered template with the latest questions.
+        - HttpResponse: The HTTP response containing the rendered template with the latest questions.
  """
 def index(request):
-    
     # get all question ordered by pub date and get the latest 5 question
     latest_question_list = Question.objects.order_by('-pub_date') [:5]
-    template = loader.get_template("polls/index.html")
-    context = {
-        "latest_question_list": latest_question_list,
-    }
+    context = {"latest_question_list": latest_question_list}
     # return the response
-    return HttpResponse(template.render(context, request))
+    return render(request, "polls/index.html", context)
 
 """
-    Detail View:
-    Displays the details of a specific question.
-
+    - Detail View:
+        Displays the details of a specific question.
     Parameters:
-    - request (HttpRequest): The HTTP request object.
-    - question_id (int): The ID of the question to display.
-
+        - request (HttpRequest): The HTTP request object.
+        - question_id (int): The ID of the question to display.
     Returns:
     - HttpResponse: The HTTP response containing the details of the specified question.
  """
@@ -55,12 +47,10 @@ def results(request, question_id):
 
 """
     Vote View:
-    Handles the voting on a specific question.
-
+     - Handles the voting on a specific question.
     Parameters:
-    - request (HttpRequest): The HTTP request object.
-    - question_id (int): The ID of the question to vote on.
-
+        - request (HttpRequest): The HTTP request object.
+        - question_id (int): The ID of the question to vote on.
     Returns:
     - HttpResponse: The HTTP response indicating the voting action on the specified question.
 """
