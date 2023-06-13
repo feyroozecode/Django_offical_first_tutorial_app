@@ -1,5 +1,4 @@
-from django.http import HttpResponse 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Question
 
 """
@@ -9,6 +8,7 @@ from .models import Question
         - request (HttpRequest): The HTTP request object.
     Returns:
         - HttpResponse: The HTTP response containing the rendered template with the latest questions.
+    
  """
 def index(request):
     # get all question ordered by pub date and get the latest 5 question
@@ -25,25 +25,18 @@ def index(request):
         - question_id (int): The ID of the question to display.
     Returns:
     - HttpResponse: The HTTP response containing the details of the specified question.
+    
+    TryCatch : 
+        Handle the good response and 404 Found if Question does not exist
  """
 def detail(request, question_id):
-    return HttpResponse('You\'re looking at question %s.'
-                         % question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, "polls/detail.html", {"question": question})
 
-"""
-    Results View:
-    Displays the results of a specific question.
 
-    Parameters:
-    - request (HttpRequest): The HTTP request object.
-    - question_id (int): The ID of the question to display the results for.
-
-    Returns:
-    - HttpResponse: The HTTP response containing the results of the specified question.
-"""
 def results(request, question_id):
     response = 'You\re looking results of question %s.'
-    return HttpResponse(response % question_id)
+    return render(request, "polls/results.html", {"results": response % question_id})
 
 """
     Vote View:
